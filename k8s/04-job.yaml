@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spring-batch-greeting-job
+  namespace: spring-batch
+  labels:
+    app: basic-spring-batch
+    job-type: greeting
+spec:
+  ttlSecondsAfterFinished: 300  # Limpiar el job después de 5 minutos
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: basic-spring-batch
+        job-type: greeting
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: spring-batch-job
+        image: basic-spring-batch:1.0.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_OPTS
+          valueFrom:
+            configMapKeyRef:
+              name: spring-batch-config
+              key: JAVA_OPTS
+        - name: SPRING_PROFILES_ACTIVE
+          value: "k8s"
+        command: ["sh", "-c"]
+        args: ["java $JAVA_OPTS -jar app.jar \"$@\"", "--", "nombre=Mundo", "numero=42"]
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+# Job con parámetros personalizados (ejemplo)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spring-batch-custom-job
+  namespace: spring-batch
+  labels:
+    app: basic-spring-batch
+    job-type: custom-greeting
+spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: basic-spring-batch
+        job-type: custom-greeting
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: spring-batch-custom-job
+        image: basic-spring-batch:1.0.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_OPTS
+          valueFrom:
+            configMapKeyRef:
+              name: spring-batch-config
+              key: JAVA_OPTS
+        - name: SPRING_PROFILES_ACTIVE
+          value: "k8s"
+        command: ["sh", "-c"]
+        args: ["java $JAVA_OPTS -jar app.jar \"$@\"", "--", "nombre=Ana", "numero=25"]
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

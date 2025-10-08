@@ -1,0 +1,88 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spring-batch-scheduled-greeting
+  namespace: spring-batch
+  labels:
+    app: basic-spring-batch
+    job-type: scheduled
+spec:
+  schedule: "0 */6 * * *"  # Cada 6 horas
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 300
+      template:
+        metadata:
+          labels:
+            app: basic-spring-batch
+            job-type: scheduled-greeting
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: spring-batch-scheduled
+            image: basic-spring-batch:1.0.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: JAVA_OPTS
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-batch-config
+                  key: JAVA_OPTS
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+            command: ["sh", "-c"]
+            args: ["java $JAVA_OPTS -jar app.jar \"$@\"", "--", "nombre=Mundo", "numero=42"]
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+---
+# CronJob para ejecución diaria
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spring-batch-daily-greeting
+  namespace: spring-batch
+  labels:
+    app: basic-spring-batch
+    job-type: daily
+spec:
+  schedule: "0 9 * * *"  # Todos los días a las 9:00 AM
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 300
+      template:
+        metadata:
+          labels:
+            app: basic-spring-batch
+            job-type: daily-greeting
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: spring-batch-daily
+            image: basic-spring-batch:1.0.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: JAVA_OPTS
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-batch-config
+                  key: JAVA_OPTS
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+            command: ["sh", "-c"]
+            args: ["java $JAVA_OPTS -jar app.jar \"$@\"", "--", "nombre=Kubernetes", "numero=30"]
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1

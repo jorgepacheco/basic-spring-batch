@@ -71,6 +71,34 @@ docker-compose up
 docker-compose --profile custom up
 ```
 
+### Ejecución con Kubernetes
+
+#### Desplegar en Kubernetes
+
+```bash
+# Aplicar todos los manifiestos
+kubectl apply -f k8s/
+
+# Verificar el despliegue
+kubectl get all -n spring-batch
+```
+
+#### Ejecutar Jobs
+
+```bash
+# Job con parámetros por defecto
+kubectl create job --from=job/spring-batch-greeting-job manual-job -n spring-batch
+
+# Ver logs del job
+kubectl logs job/manual-job -n spring-batch
+```
+
+#### Ejecución Programada
+
+Los CronJobs se ejecutan automáticamente:
+- **Cada 6 horas**: `spring-batch-scheduled-greeting`
+- **Diario a las 9:00 AM**: `spring-batch-daily-greeting`
+
 ## Ejemplos de Uso
 
 1. **Con parámetros personalizados:**
@@ -105,3 +133,4 @@ Los parámetros deben pasarse en formato `clave=valor` separados por espacios.
 - Java 21
 - Docker
 - Docker Compose
+- Kubernetes

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-batch-config
+  namespace: spring-batch
+  labels:
+    app: basic-spring-batch
+data:
+  # Configuración de Spring Batch
+  spring.batch.job.enabled: "true"
+  spring.batch.jdbc.initialize-schema: "always"
+
+  # Configuración de base de datos H2 (en memoria)
+  spring.datasource.url: "jdbc:h2:mem:testdb"
+  spring.datasource.driverClassName: "org.h2.Driver"
+  spring.datasource.username: "sa"
+  spring.datasource.password: "password"
+
+  # Configuración de H2 Console (opcional para debugging)
+  spring.h2.console.enabled: "true"
+
+  # Parámetros por defecto del batch
+  default.nombre: "Mundo"
+  default.numero: "42"
+
+  # Configuración de Java
+  JAVA_OPTS: "-Xmx512m -Xms256m"

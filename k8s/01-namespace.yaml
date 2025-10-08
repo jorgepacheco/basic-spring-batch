@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spring-batch
+  labels:
+    name: spring-batch
+    app: basic-spring-batch
+  annotations:
+    description: "Namespace for Basic Spring Batch application"
