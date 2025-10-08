@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  basic-spring-batch:
+    image: basic-spring-batch:1.0.0
+    container_name: spring-batch-greeting
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    # Ejecutar con parámetros por defecto
+    command: [ "nombre=Mundo", "numero=42" ]
+
+  # Ejemplo de servicio con parámetros personalizados
+  batch-with-custom-params:
+    image: basic-spring-batch:1.0.0
+    container_name: spring-batch-custom
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    command: [ "nombre=Ana", "numero=25" ]
+    profiles:
+      - custom

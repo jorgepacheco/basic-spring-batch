@@ -1,0 +1,1 @@
+Quiero crear un proceso batch muy simple que reciba como parametro un nombre y un numero y que pinte por consola 'hola {nombre} tiene {numero} annos'. Debe estar de desarrollado con spring-batch y maven

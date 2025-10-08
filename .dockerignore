@@ -1,0 +1,38 @@
+# Archivos de desarrollo
+.git
+.gitignore
+README.md
+AGENTS.md
+Instrucciones.md
+
+# Archivos de Maven
+.mvn
+mvnw
+mvnw.cmd
+
+# Directorio target (excepto el JAR final)
+target/classes
+target/generated-sources
+target/generated-test-sources
+target/maven-archiver
+target/maven-status
+target/test-classes
+
+# Archivos de IDE
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
